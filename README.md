@@ -1,87 +1,92 @@
 # 🐘 PostgresCrudApp
 
-A simple CRUD API using ASP.NET Core 9 and PostgreSQL with Entity Framework Core.
+A simple CRUD API built using **ASP.NET Core 9** and **PostgreSQL**, powered by **Entity Framework Core**.
 
 ---
 
-## 🛠️ Tech Stack
+## 🧰 Tech Stack
 
-| Technology                       | Version  | Purpose                              |
-|----------------------------------|----------|--------------------------------------|
-| .NET Core                        | 9.0      | Framework                            |
-| ASP.NET Core Web API             | 9.0      | Backend REST API                     |
-| PostgreSQL                       | 15+      | Relational database                  |
-| Entity Framework Core            | 9.0+     | ORM for DB access                    |
-| Npgsql.EntityFrameworkCore       | 9.0+     | PostgreSQL provider for EF           |
-| Swagger (Swashbuckle)            | 6.5+     | API documentation                    |
+| Technology                    | Version | Description                       |
+|------------------------------|---------|-----------------------------------|
+| .NET Core                    | 9.0     | Base framework                    |
+| ASP.NET Core Web API         | 9.0     | Backend REST API                  |
+| PostgreSQL                   | 15+     | Relational database               |
+| Entity Framework Core        | 9.0+    | ORM for database operations       |
+| Npgsql.EntityFrameworkCore   | 9.0+    | PostgreSQL EF Core provider       |
+| Swagger (Swashbuckle)        | 6.5+    | API documentation and testing     |
 
 ---
 
-## 📂 Project Structure
+## 🧱 Project Structure
 
 ```bash
 PostgresCrudApp/
-│
-├── Controllers/              # API Controllers
+├── Controllers/              # API controllers
 │   └── UsersController.cs
-│
-├── Models/                   # Data Models
+├── Models/                   # Data models
 │   └── User.cs
-│
-├── Data/                     # Database Context
+├── Data/                     # EF DbContext
 │   └── ApplicationDbContext.cs
-│
-├── Migrations/               # EF Migrations
-│
-├── Program.cs                # App Configuration
-├── appsettings.json          # DB Connection String
-└── README.md                 # Project Documentation
+├── Migrations/               # EF migrations
+├── Program.cs                # App entrypoint & configuration
+├── appsettings.json          # DB connection string
+└── README.md                 # Project documentation
+```
 
-⚙️ Prerequisites
-.NET SDK 9.0
+---
 
-PostgreSQL
+## ⚙️ Getting Started
 
-A PostgreSQL client like pgAdmin or DBeaver
+### 1️⃣ Clone the Repo
 
-🚀 Getting Started
-🔧 Clone & Restore
-
+```bash
 git clone https://github.com/your-username/PostgresCrudApp.git
 cd PostgresCrudApp
-dotnet restore
+```
 
-🧩 Configure Connection String
-Update your appsettings.json:
+### 2️⃣ Set the Connection String
 
+In `appsettings.json`, update:
+
+```json
 "ConnectionStrings": {
-  "DefaultConnection": "Host=localhost;Port=5432;Database=YourDbName;Username=postgres;Password=yourpassword"
+  "DefaultConnection": "Host=localhost;Port=5432;Database=YourDb;Username=postgres;Password=yourpassword"
 }
+```
 
-🏗️ Apply Migration
+### 3️⃣ Apply EF Migrations
 
+```bash
 dotnet ef migrations add InitialCreate
 dotnet ef database update
+```
 
-▶️ Run the App
+### 4️⃣ Run the Application
 
+```bash
 dotnet run
+```
 
-Now visit: https://localhost:5001/swagger
+Visit Swagger UI:  
+🔗 `https://localhost:5001/swagger`
 
-🔁 API Endpoints
+---
 
-| Method | Endpoint        | Description             |
-| ------ | --------------- | ----------------------- |
-| GET    | /api/users      | Get all users           |
-| GET    | /api/users/{id} | Get a user by ID        |
-| POST   | /api/users      | Create a new user       |
-| PUT    | /api/users/{id} | Update an existing user |
-| DELETE | /api/users/{id} | Delete a user           |
+## 🔁 API Endpoints
 
+| Method | Endpoint        | Description            |
+|--------|------------------|------------------------|
+| GET    | `/api/users`     | Get all users          |
+| GET    | `/api/users/{id}`| Get user by ID         |
+| POST   | `/api/users`     | Create new user        |
+| PUT    | `/api/users/{id}`| Update existing user   |
+| DELETE | `/api/users/{id}`| Delete a user          |
 
-🧠 Model Example
+---
 
+## 👤 User Model
+
+```csharp
 public class User
 {
     public int Id { get; set; }
@@ -89,9 +94,13 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string Skill { get; set; } = string.Empty;
 }
+```
 
-📘 Sample Controller Logic
+---
 
+## 🚀 UsersController Example
+
+```csharp
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
@@ -104,10 +113,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-    {
-        return await _context.Users.ToListAsync();
-    }
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers() =>
+        await _context.Users.ToListAsync();
 
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUser(int id)
@@ -143,32 +150,57 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 }
-
-🧪 Swagger UI
-Once you run the app, open your browser at:
-
-https://localhost:5001/swagger
-You can test all API endpoints from Swagger directly.
-
-🔐 JWT Support (Optional)
-To enable JWT-based authentication:
-
-dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
-And configure it in Program.cs.
-
-🧂 BCrypt (Optional for Passwords)
-
-dotnet add package BCrypt.Net-Next
-
-Use it like:
-string hashed = BCrypt.Net.BCrypt.HashPassword("password");
-bool isValid = BCrypt.Net.BCrypt.Verify("password", hashed);
-
-📃 License
-Licensed under MIT License
-
-👨‍💻 Author
-Built with ❤️ by @Malik-Ubaidullah
-
+```
 
 ---
+
+## 📘 Swagger UI
+
+Once app is running, open browser:
+
+```txt
+https://localhost:5001/swagger
+```
+
+You can test all endpoints directly via Swagger UI.
+
+---
+
+## 🔐 JWT Support (Optional)
+
+For secured endpoints with JWT:
+
+```bash
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+```
+
+Then configure in `Program.cs`.
+
+---
+
+## 🔑 BCrypt (Optional - Password Hashing)
+
+Add package:
+
+```bash
+dotnet add package BCrypt.Net-Next
+```
+
+Use like this:
+
+```csharp
+string hash = BCrypt.Net.BCrypt.HashPassword("your_password");
+bool isValid = BCrypt.Net.BCrypt.Verify("your_password", hash);
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Author
+
+Built with ❤️ by [@Malik-Ubaidullah](https://github.com/Malik-Ubaidullah)
